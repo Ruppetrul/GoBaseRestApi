@@ -8,7 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", home)
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
 }
