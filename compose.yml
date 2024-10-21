@@ -5,3 +5,11 @@ services:
       - "80:80"
     environment:
       - GO_ENV=development
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=first_rest
+      - POSTGRES_PASSWORD=first_rest
+      - POSTGRES_DB=first_rest
