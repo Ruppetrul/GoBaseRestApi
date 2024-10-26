@@ -2,6 +2,6 @@ package repositories
 
 import "firstRest/models"
 
-type Interface interface {
+type RepositoryInterface interface {
 	GetCurrentPrices() []models.Price
 }
