@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"firstRest/models"
+	"firstRest/workers"
 	"log"
 	"math/rand"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/current", current)
+	workers.RegisterCurrentPriceWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
