@@ -21,9 +21,9 @@ func main() {
 func current(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	prices := []models.Price{
-		{ID: 1, Name: "BTC", Price: float32(rand.Intn(60000) + 10000)},
-		{ID: 1, Name: "LTC", Price: float32(rand.Intn(300) + 50)},
-		{ID: 1, Name: "DOGE", Price: float32(rand.Intn(0.3*100) + 0.1*100)},
+		{ID: 1, Name: "BTC", Price: string(rune(rand.Intn(60000) + 10000))},
+		{ID: 1, Name: "LTC", Price: string(rune(rand.Intn(300) + 50))},
+		{ID: 1, Name: "DOGE", Price: string(rune(rand.Intn(0.3*100) + 0.1*100))},
 	}
 	_ = json.NewEncoder(w).Encode(prices)
 }
