@@ -1,8 +1,8 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
+	"firstRest/database"
 	"firstRest/workers"
 	_ "github.com/lib/pq"
 	"log"
@@ -19,17 +19,16 @@ func main() {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	connStr := "user=first_rest password=first_rest dbname=first_rest host=postgres sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	connection, err := database.GetDBInstance()
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Init db connection error", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	defer db.Close()
+	defer connection.Db.Close()
 
-	prices, err := db.Query(`SELECT name, price FROM prices;`)
+	prices, err := connection.Db.Query(`SELECT name, price FROM prices;`)
 	if err != nil {
 		log.Println("Error scanning row: query", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
