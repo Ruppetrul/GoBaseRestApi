@@ -22,8 +22,13 @@ func RegisterCurrentPriceWorker() {
 			if prices == nil {
 				fmt.Println("Prices is empty")
 			}
-			//TODO save to db.
-			fmt.Println("Current time: ", prices)
+
+			for _, price := range prices {
+				err := price.Save()
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
 		}
 	}
 }
