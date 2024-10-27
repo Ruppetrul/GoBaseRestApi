@@ -20,7 +20,11 @@ func (p *Price) Save() error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO prices (name, price) VALUES ($1, $2) RETURNING id", p.Name, p.Price)
+	_, err = db.Exec(`INSERT INTO prices (name, price)
+		 VALUES ($1, $2)
+		 ON CONFLICT (name) DO UPDATE
+		 SET price = EXCLUDED.price
+		 RETURNING id`, p.Name, p.Price)
 	if err != nil {
 		return err
 	}
