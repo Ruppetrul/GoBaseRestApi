@@ -30,7 +30,7 @@ func (b Repository) GetCurrentPrices() ([]models.Price, error) {
 	var priceMap []models.Price
 	for _, priceResponse := range prices {
 		priceMap = append(priceMap, models.Price{
-			ID: 1, Name: priceResponse.Symbol, Price: priceResponse.Price,
+			Name: priceResponse.Symbol, Price: priceResponse.Price,
 		})
 	}
 

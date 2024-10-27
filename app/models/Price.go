@@ -6,7 +6,6 @@ import (
 )
 
 type Price struct {
-	ID    int
 	Name  string
 	Price string
 }
@@ -22,7 +21,7 @@ func (p *Price) Save() error {
 		 VALUES ($1, $2)
 		 ON CONFLICT (name) DO UPDATE
 		 SET price = EXCLUDED.price
-		 RETURNING id`, p.Name, p.Price)
+		 RETURNING name`, p.Name, p.Price)
 	if err != nil {
 		return err
 	}
