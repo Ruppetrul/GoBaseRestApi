@@ -19,16 +19,7 @@ func main() {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	connection, err := database.GetDBInstance()
-
-	if err != nil {
-		log.Println("Init db connection error", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	defer connection.Db.Close()
-
-	prices, err := connection.Db.Query(`SELECT name, price FROM prices;`)
+	prices, err := database.Select(`SELECT name, price FROM prices;`)
 	if err != nil {
 		log.Println("Error scanning row: query", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

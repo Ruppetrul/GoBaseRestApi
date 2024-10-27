@@ -28,3 +28,11 @@ func GetDBInstance() (*dbSingleton, error) {
 
 	return instance, nil
 }
+
+func Select(query string) (*sql.Rows, error) {
+	connection, err := GetDBInstance()
+	if err != nil {
+		log.Println("Error scanning row: query", err)
+	}
+	return connection.Db.Query(query)
+}
