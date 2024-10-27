@@ -12,7 +12,7 @@ import (
 func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/current", current)
-	workers.RegisterCurrentPriceWorker()
+	go workers.RegisterCurrentPriceWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
