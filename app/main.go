@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"firstRest/database"
+	_ "firstRest/database"
+	"firstRest/models"
 	"firstRest/workers"
-	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 )
@@ -19,32 +19,15 @@ func main() {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	prices, err := database.Select(`SELECT name, price FROM prices;`)
+	prices, err := models.GetList()
 	if err != nil {
-		log.Println("Error scanning row: query", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	var pricesResult []PriceResponse
-	for prices.Next() {
-		var price PriceResponse
-		if err := prices.Scan(&price.Name, &price.Price); err != nil {
-			log.Println("Error scanning row: parse", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		pricesResult = append(pricesResult, price)
-	}
-
-	if err := prices.Err(); err != nil {
-		log.Println("Error scanning row: parse 2", err)
+		log.Println("Error when fetching list", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(pricesResult); err != nil {
+	if err := json.NewEncoder(w).Encode(prices); err != nil {
 		log.Println("Error encoding response:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return

@@ -2,7 +2,7 @@ package models
 
 import (
 	"firstRest/database"
-	_ "github.com/lib/pq"
+	"log"
 )
 
 type Price struct {
@@ -17,7 +17,6 @@ func (p *Price) Save() error {
 	if err != nil {
 		return err
 	}
-	defer connection.Db.Close()
 
 	_, err = connection.Db.Exec(`INSERT INTO prices (name, price)
 		 VALUES ($1, $2)
@@ -28,4 +27,25 @@ func (p *Price) Save() error {
 		return err
 	}
 	return nil
+}
+
+func GetList() ([]Price, error) {
+	prices, err := database.Select(`SELECT name, price FROM prices;`)
+
+	if err != nil {
+		log.Println("Error scanning row: query", err)
+		return nil, err
+	}
+
+	var pricesResult []Price
+	for prices.Next() {
+		var price Price
+		if err := prices.Scan(&price.Name, &price.Price); err != nil {
+			log.Println("Error scanning row: parse", err)
+			return nil, err
+		}
+		pricesResult = append(pricesResult, price)
+	}
+
+	return pricesResult, nil
 }
