@@ -24,9 +24,11 @@ func RegisterCurrentPriceWorker() {
 			}
 
 			for _, price := range prices {
-				err := price.Save()
-				if err != nil {
-					fmt.Println(err)
+				if len(price.Name) > 3 && price.Name[len(price.Name)-3:] == "USD" {
+					err := price.Save()
+					if err != nil {
+						fmt.Println(err)
+					}
 				}
 			}
 		}
