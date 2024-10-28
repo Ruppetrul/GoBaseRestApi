@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	_ "firstRest/database"
-	"firstRest/models"
+	"firstRest/models/binance"
 	"firstRest/workers"
 	"fmt"
 	"log"
@@ -21,7 +21,7 @@ func main() {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	prices, err := models.GetList()
+	prices, err := binance.GetList()
 	if err != nil {
 		log.Println("Error when fetching list", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

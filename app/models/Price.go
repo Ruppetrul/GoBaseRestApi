@@ -2,7 +2,6 @@ package models
 
 import (
 	"firstRest/database"
-	"log"
 )
 
 type Price struct {
@@ -26,25 +25,4 @@ func (p *Price) Save() error {
 		return err
 	}
 	return nil
-}
-
-func GetList() ([]Price, error) {
-	prices, err := database.Select(`SELECT name, price FROM prices;`)
-
-	if err != nil {
-		log.Println("Error scanning row: query", err)
-		return nil, err
-	}
-
-	var pricesResult []Price
-	for prices.Next() {
-		var price Price
-		if err := prices.Scan(&price.Name, &price.Price); err != nil {
-			log.Println("Error scanning row: parse", err)
-			return nil, err
-		}
-		pricesResult = append(pricesResult, price)
-	}
-
-	return pricesResult, nil
 }

@@ -27,7 +27,8 @@ func RegisterTickerWorker() {
 			for _, ticker := range tickers {
 				if len(ticker.Symbol) > 3 && ticker.Symbol[len(ticker.Symbol)-3:] == "USD" {
 					b := binance.Ticker{
-						Symbol: ticker.Symbol, LastPrice: ticker.LastPrice, PriceChangePercent: ticker.PriceChangePercent,
+						Symbol: ticker.Symbol, LastPrice: ticker.LastPrice,
+						PriceChangePercent: ticker.PriceChangePercent, QuoteVolume: ticker.QuoteVolume,
 					}
 					err := b.Save()
 					if err != nil {
