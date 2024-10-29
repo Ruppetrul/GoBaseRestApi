@@ -32,6 +32,10 @@ func RegisterGeneralWorker() {
 					fmt.Print(err)
 				}
 			}
+
+			/*
+				There need prepare base html and save to temp file or memory.
+			*/
 		}
 	}
 }
