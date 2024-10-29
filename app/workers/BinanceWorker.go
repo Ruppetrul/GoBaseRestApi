@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func RegisterTickerWorker() {
+func RegisterBinanceWorker() {
 	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 

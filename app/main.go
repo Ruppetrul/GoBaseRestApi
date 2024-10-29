@@ -8,13 +8,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/current", current)
 	http.HandleFunc("/test", test)
-	go workers.RegisterTickerWorker()
+	go workers.RegisterBinanceWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
@@ -22,8 +23,17 @@ func main() {
 
 func test(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	html := ""
-	fmt.Fprint(w, html)
+
+	filename := "front/index.html"
+	html, err := os.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = fmt.Fprint(w, string(html))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
