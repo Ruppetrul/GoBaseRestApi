@@ -13,11 +13,17 @@ import (
 func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/current", current)
-	go workers.RegisterCurrentPriceWorker()
+	http.HandleFunc("/test", test)
 	go workers.RegisterTickerWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	html := ""
+	fmt.Fprint(w, html)
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
