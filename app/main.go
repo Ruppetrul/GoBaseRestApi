@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	_ "firstRest/database"
-	"firstRest/models/binance"
+	"firstRest/models"
 	"firstRest/workers"
 	"fmt"
 	"log"
@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/current", current)
 	http.HandleFunc("/test", test)
 	go workers.RegisterBinanceWorker()
+	go workers.RegisterGeneralWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
@@ -37,7 +38,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	prices, err := binance.GetList()
+	prices, err := models.GetList()
 	if err != nil {
 		log.Println("Error when fetching list", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

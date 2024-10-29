@@ -1,24 +1,24 @@
-package binance
+package models
 
 import (
 	"firstRest/database"
 	"log"
 )
 
-type Ticker struct {
+type General struct {
 	Symbol             string
 	LastPrice          string
 	PriceChangePercent string
 	QuoteVolume        string
 }
 
-func (p *Ticker) Save() error {
+func (p *General) Save() error {
 	connection, err := database.GetDBInstance()
 
 	if err != nil {
 		return err
 	}
-	_, err = connection.Db.Exec(`INSERT INTO binance (symbol, last_price, price_change_percent, quote_volume)
+	_, err = connection.Db.Exec(`INSERT INTO general (symbol, last_price, price_change_percent, quote_volume)
 		 VALUES ($1, $2, $3, $4)
 		 ON CONFLICT (symbol) DO UPDATE
 		 SET last_price = EXCLUDED.last_price
@@ -29,18 +29,18 @@ func (p *Ticker) Save() error {
 	return nil
 }
 
-func GetList() ([]Ticker, error) {
-	prices, err := database.Select(`SELECT symbol, last_price, price_change_percent, quote_volume FROM binance ORDER BY quote_volume DESC;`)
+func GetList() ([]General, error) {
+	prices, err := database.Select(`SELECT symbol, last_price FROM general ORDER BY quote_volume DESC;`)
 
 	if err != nil {
 		log.Println("Error scanning row: query", err)
 		return nil, err
 	}
 
-	var pricesResult []Ticker
+	var pricesResult []General
 	for prices.Next() {
-		var price Ticker
-		if err := prices.Scan(&price.Symbol, &price.LastPrice, &price.PriceChangePercent, &price.QuoteVolume); err != nil {
+		var price General
+		if err := prices.Scan(&price.Symbol, &price.LastPrice); err != nil {
 			log.Println("Error scanning row: parse", err)
 			return nil, err
 		}
