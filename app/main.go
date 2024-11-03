@@ -16,7 +16,8 @@ func main() {
 	http.HandleFunc("/current", current)
 	http.HandleFunc("/test", test)
 	go workers.RegisterBinanceWorker()
-	go workers.RegisterGeneralWorker()
+	//TODO "BYbit" etc. workers.
+	go workers.RegisterGeneralWorker() //General calculations.
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
