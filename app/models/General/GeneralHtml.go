@@ -4,6 +4,7 @@ import (
 	"firstRest/database"
 	"log"
 	"sync"
+	"time"
 )
 
 type Html struct {
@@ -14,6 +15,8 @@ var (
 	htmlCache   Html
 	cacheLoaded bool
 	cacheMu     sync.Mutex
+	cacheTTL    = time.Minute // Время жизни кэша
+	cacheTime   time.Time
 )
 
 func GetFirst() (Html, error) {
@@ -41,13 +44,14 @@ func GetFromMemory() (Html, error) {
 	cacheMu.Lock()
 	defer cacheMu.Unlock()
 
-	if !cacheLoaded {
+	if !cacheLoaded || time.Since(cacheTime) > cacheTTL {
 		var err error
 		htmlCache, err = GetFirst()
 		if err != nil {
 			return Html{}, err
 		}
 		cacheLoaded = true
+		cacheTime = time.Now()
 	}
 
 	return htmlCache, nil

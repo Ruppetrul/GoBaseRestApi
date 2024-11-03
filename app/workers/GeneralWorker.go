@@ -1,10 +1,12 @@
 package workers
 
 import (
+	"bytes"
 	"firstRest/models"
 	"firstRest/models/General"
 	"firstRest/models/binance"
 	"fmt"
+	"text/template"
 	"time"
 )
 
@@ -37,9 +39,23 @@ func RegisterGeneralWorker() {
 			/*
 				There need prepare base html and save to temp file or memory.
 			*/
-			html := "<html lang=\"en\">\n    <table>\n        <tr>\n            <th>\n                Name\n            </th>\n            <th>\n                Price\n            </th>\n            <th>\n                24h Volume\n            </th>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n        <tr>\n            <td>\n                Test\n            </td>\n            <td>\n                123.0\n            </td>\n            <td>\n                77777\n            </td>\n        </tr>\n    </table>\n</html>"
+
+			index, err := template.ParseFiles("front/index.html")
+			if err != nil {
+				panic(err)
+			}
+
+			var buf bytes.Buffer
+
+			// Выполняем шаблон и записываем результат в стандартный вывод
+			if err := index.Execute(&buf, nil); err != nil {
+				panic(err)
+			}
+
+			result := buf.String()
+
 			g := General.Html{
-				Html: html,
+				Html: result,
 			}
 			err = g.Save()
 			if err != nil {
