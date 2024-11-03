@@ -51,11 +51,32 @@ func RegisterGeneralWorker() {
 				panic(err)
 			}
 
+			rows := ""
+
+			var rowBuf bytes.Buffer
+			tableRow, err := template.ParseFiles("front/table_row.html")
+			if err != nil {
+				panic(err)
+			}
+
+			for _, v := range list {
+				rowBuf2 := rowBuf
+				tableRow2 := tableRow
+				b := models.General{
+					Symbol: v.Symbol, LastPrice: v.LastPrice,
+					PriceChangePercent: v.PriceChangePercent, QuoteVolume: v.QuoteVolume,
+				}
+				if err := tableRow2.Execute(&rowBuf2, b); err != nil {
+					panic(err)
+				}
+				rows = rows + rowBuf2.String()
+			}
 			var tableBuf bytes.Buffer
 			var indexBuf bytes.Buffer
 
-			// Выполняем шаблон и записываем результат в стандартный вывод
-			if err := table.Execute(&tableBuf, nil); err != nil {
+			if err := table.Execute(&tableBuf, front.TableData{
+				Rows: rows,
+			}); err != nil {
 				panic(err)
 			}
 
@@ -65,7 +86,6 @@ func RegisterGeneralWorker() {
 				Table: tableResult,
 			}
 
-			// Выполняем шаблон и записываем результат в стандартный вывод
 			if err := index.Execute(&indexBuf, data); err != nil {
 				panic(err)
 			}
