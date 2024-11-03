@@ -2,6 +2,7 @@ package workers
 
 import (
 	"bytes"
+	"firstRest/front"
 	"firstRest/models"
 	"firstRest/models/General"
 	"firstRest/models/binance"
@@ -45,17 +46,32 @@ func RegisterGeneralWorker() {
 				panic(err)
 			}
 
-			var buf bytes.Buffer
-
-			// Выполняем шаблон и записываем результат в стандартный вывод
-			if err := index.Execute(&buf, nil); err != nil {
+			table, err := template.ParseFiles("front/table.html")
+			if err != nil {
 				panic(err)
 			}
 
-			result := buf.String()
+			var tableBuf bytes.Buffer
+			var indexBuf bytes.Buffer
+
+			// Выполняем шаблон и записываем результат в стандартный вывод
+			if err := table.Execute(&tableBuf, nil); err != nil {
+				panic(err)
+			}
+
+			tableResult := tableBuf.String()
+			// Создаем данные для замены плейсхолдеров
+			data := front.FrontData{
+				Table: tableResult,
+			}
+
+			// Выполняем шаблон и записываем результат в стандартный вывод
+			if err := index.Execute(&indexBuf, data); err != nil {
+				panic(err)
+			}
 
 			g := General.Html{
-				Html: result,
+				Html: indexBuf.String(),
 			}
 			err = g.Save()
 			if err != nil {
