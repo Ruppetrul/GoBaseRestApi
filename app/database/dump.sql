@@ -11,3 +11,7 @@ CREATE TABLE IF NOT EXISTS binance (
     quote_volume NUMERIC(20, 8) NOT NULL,
     price_change_percent NUMERIC(5, 2) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS general_html (
+    html text NULL
+);
