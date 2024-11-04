@@ -73,7 +73,7 @@ func test1(w http.ResponseWriter, r *http.Request) {
 		if err := tableRow.Execute(&rowBuf, v); err != nil {
 			panic(err)
 		}
-		rows = append(rows, rowBuf.String()) // Добавляем строки в срез
+		rows = append(rows, rowBuf.String())
 	}
 
 	var tableBuf bytes.Buffer
