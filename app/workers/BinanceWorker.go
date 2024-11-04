@@ -7,7 +7,7 @@ import (
 )
 
 func RegisterCoinGeckoWorker() {
-	ticker := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(6 * time.Minute)
 	defer ticker.Stop()
 
 	for {
