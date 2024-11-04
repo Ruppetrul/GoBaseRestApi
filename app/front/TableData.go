@@ -1,5 +1,11 @@
 package front
 
+import "html/template"
+
 type TableData struct {
-	Rows string
+	Rows template.HTML
+}
+
+type FrontData struct {
+	Table template.HTML
 }
