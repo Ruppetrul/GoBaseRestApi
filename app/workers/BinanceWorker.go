@@ -1,21 +1,19 @@
 package workers
 
 import (
-	"firstRest/models/binance"
-	"firstRest/repositories/Binance"
+	"firstRest/repositories"
 	"fmt"
 	"time"
 )
 
-func RegisterBinanceWorker() {
-	ticker := time.NewTicker(time.Minute)
+func RegisterCoinGeckoWorker() {
+	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
 	for {
 		select {
 		case <-ticker.C:
-			binanceRep := Binance.Repository{}
-			tickers, err := binanceRep.GetTicker()
+			tickers, err := repositories.CoinGeckoRepository{}.GetTicker()
 
 			if err != nil {
 				fmt.Println(err)
@@ -25,15 +23,9 @@ func RegisterBinanceWorker() {
 			}
 
 			for _, ticker := range tickers {
-				if len(ticker.Symbol) > 3 && ticker.Symbol[len(ticker.Symbol)-3:] == "USD" {
-					b := binance.Ticker{
-						Symbol: ticker.Symbol, LastPrice: ticker.LastPrice,
-						PriceChangePercent: ticker.PriceChangePercent, QuoteVolume: ticker.QuoteVolume,
-					}
-					err := b.Save()
-					if err != nil {
-						fmt.Println(err)
-					}
+				err, _ := ticker.Save()
+				if err != nil {
+					fmt.Println(err)
 				}
 			}
 		}
