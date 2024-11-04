@@ -9,8 +9,8 @@ type Markets struct {
 	Id           string  `db:"id"`
 	Symbol       string  `db:"symbol"`
 	Name         string  `db:"name"`
-	CurrentPrice float32 `db:"current_price"`
-	MarketCap    int64   `db:"market_cap"`
+	CurrentPrice float32 `json:"current_price" db:"current_price"`
+	MarketCap    int64   `json:"market_cap" db:"market_cap"`
 }
 
 func (p *Markets) Save() (sql.Result, error) {
