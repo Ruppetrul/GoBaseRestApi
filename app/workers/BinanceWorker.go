@@ -7,7 +7,7 @@ import (
 )
 
 func RegisterCoinGeckoWorker() {
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
 	for {
@@ -23,7 +23,7 @@ func RegisterCoinGeckoWorker() {
 			}
 
 			for _, ticker := range tickers {
-				err, _ := ticker.Save()
+				_, err := ticker.Save()
 				if err != nil {
 					fmt.Println(err)
 				}
