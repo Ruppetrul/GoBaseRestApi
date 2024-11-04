@@ -3,6 +3,7 @@ package coingecko
 import (
 	"database/sql"
 	"firstRest/database"
+	"fmt"
 )
 
 type Markets struct {
@@ -24,8 +25,8 @@ func (p *Markets) Save() (sql.Result, error) {
 		SET current_price = EXCLUDED.current_price RETURNING symbol;`, p.Id, p.Symbol, p.Name, p.CurrentPrice, p.MarketCap)
 }
 
-func GetList() ([]Markets, error) {
-	rows, err := database.Select(`SELECT id, symbol, name, current_price, market_cap FROM coingecko;`)
+func GetList(orderField string) ([]Markets, error) {
+	rows, err := database.Select(fmt.Sprintf("SELECT id, symbol, name, current_price, market_cap FROM coingecko ORDER BY %s DESC;", orderField))
 	if err != nil {
 		return nil, err
 	}

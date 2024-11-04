@@ -24,7 +24,7 @@ func main() {
 }
 
 func current(w http.ResponseWriter, r *http.Request) {
-	prices, err := coingecko.GetList()
+	prices, err := coingecko.GetList("market_cap")
 	if err != nil {
 		log.Println("Error when fetching list", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -40,7 +40,7 @@ func current(w http.ResponseWriter, r *http.Request) {
 }
 
 func test1(w http.ResponseWriter, r *http.Request) {
-	prices, err := coingecko.GetList()
+	prices, err := coingecko.GetList("market_cap")
 
 	if err != nil {
 		log.Println("Error when fetching list", err)
