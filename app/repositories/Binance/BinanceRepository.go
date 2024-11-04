@@ -33,10 +33,6 @@ func (Repository) GetURL() string {
 	return "https://api.binance.com"
 }
 
-func (b Repository) GetTickerBaseUrl() string {
-	return Repository.GetURL(b) + "/api/v3/ticker/price"
-}
-
 func (b Repository) Get24TickerBaseUrl() string {
 	return Repository.GetURL(b) + "/api/v3/ticker/24hr"
 }
