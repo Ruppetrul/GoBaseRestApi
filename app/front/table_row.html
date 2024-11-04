@@ -1,4 +1,6 @@
-<tr style="border-bottom: 1px solid black;">
+<tr style="border-bottom: 1px solid black; tr:last-child {
+    border-bottom: none;
+}">
     <td>
         <b style="font-size: 1.5em;">
         {{.Symbol}}
@@ -6,8 +8,14 @@
         <br>
         {{.Name}}
     </td>
-    <td style="font-size: 1.5em;">
-        {{.FormattedPrice}} $
+    <td>
+        <b style="font-size: 1.5em;">
+            {{.FormattedPrice}} $
+        </b>
+        <br>
+        <span style="color: {{if gt .PriceChangePercentage 0.0}}green{{else}}red{{end}};">
+            {{.PriceChangePercentage}}%
+        </span>
     </td>
     <td>
         {{.FormattedCap}} $
