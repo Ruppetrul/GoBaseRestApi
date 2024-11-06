@@ -15,3 +15,5 @@ services:
       - POSTGRES_DB=first_rest
     volumes:
       - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
