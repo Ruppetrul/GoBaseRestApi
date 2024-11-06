@@ -14,9 +14,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", home)
+	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
-	http.HandleFunc("/test1", test1)
 	go workers.RegisterCoinGeckoWorker()
 	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
@@ -102,9 +101,4 @@ func test1(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-}
-
-func home(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode("Welcome")
 }
