@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"firstRest/database"
 	_ "firstRest/database"
 	"firstRest/front"
 	"firstRest/models/coingecko"
@@ -122,6 +123,12 @@ func test1(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write([]byte(indexBuf.String())); err != nil {
 		log.Println("Error encoding response:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = database.IncrementVisitCount()
+	if err != nil {
+		log.Println("Error increment count response:", err)
 		return
 	}
 }

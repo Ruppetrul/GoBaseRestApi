@@ -10,3 +10,8 @@ CREATE TABLE IF NOT EXISTS coingecko (
 CREATE TABLE IF NOT EXISTS general_html (
     html text NULL
 );
+
+CREATE TABLE IF NOT EXISTS page_visits (
+    visit_date VARCHAR(20) NOT NULL UNIQUE,
+    visit_count INTEGER
+);

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
 type dbSingleton struct {
@@ -44,4 +45,19 @@ func Select(query string) (*sql.Rows, error) {
 		log.Println("Error scanning row: query", err)
 	}
 	return connection.Db.Query(query)
+}
+
+func IncrementVisitCount() error {
+	connection, err := GetDBInstance()
+
+	currentDate := time.Now().Format("2006-01-02")
+
+	_, err = connection.Db.Exec(`
+		INSERT INTO page_visits (visit_date, visit_count)
+		VALUES ($1, 1)
+		ON CONFLICT (visit_date)
+		DO UPDATE SET visit_count = page_visits.visit_count + 1;
+	`, currentDate)
+
+	return err
 }
