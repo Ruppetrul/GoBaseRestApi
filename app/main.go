@@ -129,7 +129,7 @@ func test1(w http.ResponseWriter, r *http.Request) {
 func robots(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/plain")
-	_, err := w.Write([]byte("User-agent: *\nDisallow: /"))
+	_, err := w.Write([]byte("User-agent: *\nAllow: /"))
 	if err != nil {
 		log.Println("Error robots response:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
