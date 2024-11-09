@@ -20,6 +20,7 @@ func main() {
 
 	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
+	http.Handle("/robots.txt", http.StripPrefix("/robots.txt", http.FileServer(http.Dir("./"))))
 
 	env := os.Getenv("APP_ENV")
 
