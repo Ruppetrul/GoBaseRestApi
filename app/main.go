@@ -14,10 +14,15 @@ import (
 )
 
 func main() {
+	go workers.RegisterCoinGeckoWorker()
+
 	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
-	go workers.RegisterCoinGeckoWorker()
-	if err := http.ListenAndServe(":80", nil); err != nil {
+
+	certFile := "/etc/letsencrypt/live/crypto-visor.ru/fullchain.pem"
+	keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
+
+	if err := http.ListenAndServeTLS(":80", certFile, keyFile, nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
 }
