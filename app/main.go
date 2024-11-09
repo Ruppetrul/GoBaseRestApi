@@ -22,7 +22,7 @@ func main() {
 	certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
 	keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
 
-	if err := http.ListenAndServeTLS(":80", certFile, keyFile, nil); err != nil {
+	if err := http.ListenAndServeTLS(":443", certFile, keyFile, nil); err != nil {
 		log.Fatalf("Ошибка при запуске сервера %v", err)
 	}
 }
