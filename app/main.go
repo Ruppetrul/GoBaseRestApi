@@ -10,6 +10,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -19,11 +20,20 @@ func main() {
 	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
 
-	certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
-	keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
+	env := os.Getenv("APP_ENV")
 
-	if err := http.ListenAndServeTLS(":443", certFile, keyFile, nil); err != nil {
-		log.Fatalf("Ошибка при запуске сервера %v", err)
+	if env == "production" {
+		certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
+		keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
+
+		if err := http.ListenAndServeTLS(":443", certFile, keyFile, nil); err != nil {
+			log.Fatalf("Ошибка при запуске сервера %v", err)
+		}
+	} else {
+		err := http.ListenAndServe(":80", nil)
+		if err != nil {
+			log.Fatalf("Ошибка при запуске сервера %v", err)
+		}
 	}
 }
 
