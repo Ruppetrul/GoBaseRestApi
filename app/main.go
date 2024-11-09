@@ -7,6 +7,7 @@ import (
 	"firstRest/front"
 	"firstRest/models/coingecko"
 	"firstRest/workers"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -21,6 +22,12 @@ func main() {
 	http.HandleFunc("/current", current)
 
 	env := os.Getenv("APP_ENV")
+
+	if env == "" {
+		fmt.Println("APP_ENV not found.")
+	} else {
+		fmt.Printf("APP_ENV: %s\n", env)
+	}
 
 	if env == "production" {
 		certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
