@@ -17,7 +17,7 @@ var once sync.Once
 func GetDBInstance() (*dbSingleton, error) {
 	var err error
 	once.Do(func() {
-		connStr := "user=first_rest password=first_rest dbname=first_rest host=postgres sslmode=disable"
+		connStr := "user=first_rest password=first_rest dbname=first_rest host=localhost sslmode=disable"
 		instance = &dbSingleton{}
 		instance.Db, err = sql.Open("postgres", connStr)
 	})
