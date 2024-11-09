@@ -20,7 +20,7 @@ func main() {
 
 	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
-	http.Handle("/robots.txt", http.StripPrefix("/robots.txt", http.FileServer(http.Dir("./"))))
+	http.HandleFunc("/robots.txt", robots)
 
 	env := os.Getenv("APP_ENV")
 
@@ -121,6 +121,17 @@ func test1(w http.ResponseWriter, r *http.Request) {
 	log.Println(indexBuf.String())
 	if _, err := w.Write([]byte(indexBuf.String())); err != nil {
 		log.Println("Error encoding response:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func robots(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "text/plain")
+	_, err := w.Write([]byte("User-agent: *\nDisallow: /"))
+	if err != nil {
+		log.Println("Error robots response:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
