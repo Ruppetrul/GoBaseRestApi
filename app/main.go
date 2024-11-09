@@ -19,7 +19,7 @@ func main() {
 	http.HandleFunc("/", test1)
 	http.HandleFunc("/current", current)
 
-	certFile := "/etc/letsencrypt/live/crypto-visor.ru/fullchain.pem"
+	certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
 	keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
 
 	if err := http.ListenAndServeTLS(":80", certFile, keyFile, nil); err != nil {
