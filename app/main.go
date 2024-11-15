@@ -99,8 +99,7 @@ func test1(w http.ResponseWriter, r *http.Request) {
 		rows = append(rows, rowBuf.String())
 	}
 
-	var tableBuf bytes.Buffer
-	var indexBuf bytes.Buffer
+	var tableBuf, indexBuf bytes.Buffer
 
 	if err := table.Execute(&tableBuf, front.TableData{
 		Rows: template.HTML(strings.Join(rows, "")),
@@ -119,7 +118,6 @@ func test1(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	log.Println(indexBuf.String())
 	if _, err := w.Write([]byte(indexBuf.String())); err != nil {
 		log.Println("Error encoding response:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
