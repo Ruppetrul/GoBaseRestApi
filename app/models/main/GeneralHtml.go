@@ -1,4 +1,4 @@
-package General
+package main
 
 import (
 	"firstRest/database"
