@@ -73,20 +73,9 @@ func test1(w http.ResponseWriter, r *http.Request) {
 	/*
 		There need prepare base html and save to temp file or memory.
 	*/
-	index, err := template.ParseFiles("front/index.html")
-	if err != nil {
-		panic(err)
-	}
-
-	table, err := template.ParseFiles("front/table.html")
-	if err != nil {
-		panic(err)
-	}
-
-	tableRow, err := template.ParseFiles("front/table_row.html")
-	if err != nil {
-		panic(err)
-	}
+	index := template.Must(template.ParseFiles("front/index.html"))
+	table := template.Must(template.ParseFiles("front/table.html"))
+	tableRow := template.Must(template.ParseFiles("front/table_row.html"))
 
 	var rows []string
 	for _, v := range prices {
