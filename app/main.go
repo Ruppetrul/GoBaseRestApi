@@ -85,12 +85,12 @@ func test1(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	var rows []string
 	tableRow, err := template.ParseFiles("front/table_row.html")
 	if err != nil {
 		panic(err)
 	}
 
+	var rows []string
 	for _, v := range prices {
 		var rowBuf bytes.Buffer
 		if err := tableRow.Execute(&rowBuf, v); err != nil {
