@@ -32,8 +32,7 @@ func GetDBInstance() (*dbSingleton, error) {
 	})
 
 	if err != nil {
-		log.Fatalf("DB connect error: $v", err)
-		return nil, err
+		log.Fatalf("DB connect error: %v", err)
 	}
 
 	return instance, nil

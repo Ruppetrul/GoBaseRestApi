@@ -1,28 +1,28 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"firstRest/database"
 	_ "firstRest/database"
-	"firstRest/front"
-	"firstRest/models/coingecko"
+	"firstRest/handlers/api"
+	"firstRest/handlers/web"
 	"firstRest/workers"
 	"fmt"
-	"html/template"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 )
 
 func main() {
 	go workers.RegisterCoinGeckoWorker()
 
-	http.HandleFunc("/", test1)
-	http.HandleFunc("/current", current)
-	http.HandleFunc("/robots.txt", robots)
+	http.HandleFunc("/", web.Index)
+	http.HandleFunc("/api/current", api.Current)
+	http.HandleFunc("/robots.txt", web.Robots)
 
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	env := os.Getenv("APP_ENV")
 
 	if env == "" {
@@ -42,89 +42,5 @@ func main() {
 		if err := http.ListenAndServe(":80", nil); err != nil {
 			log.Fatalf("Ошибка при запуске сервера %v", err)
 		}
-	}
-}
-
-func current(w http.ResponseWriter, r *http.Request) {
-	prices, err := coingecko.GetList("market_cap")
-	if err != nil {
-		log.Println("Error when fetching list", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(prices); err != nil {
-		log.Println("Error encoding response:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-}
-
-func test1(w http.ResponseWriter, r *http.Request) {
-	prices, err := coingecko.GetList("market_cap")
-
-	if err != nil {
-		log.Println("Error when fetching list", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	/*
-		There need prepare base html and save to temp file or memory.
-	*/
-	index := template.Must(template.ParseFiles("front/index.html"))
-	table := template.Must(template.ParseFiles("front/table.html"))
-	tableRow := template.Must(template.ParseFiles("front/table_row.html"))
-
-	var rows []string
-	for _, v := range prices {
-		var rowBuf bytes.Buffer
-		if err := tableRow.Execute(&rowBuf, v); err != nil {
-			panic(err)
-		}
-		rows = append(rows, rowBuf.String())
-	}
-
-	var tableBuf, indexBuf bytes.Buffer
-
-	if err := table.Execute(&tableBuf, front.TableData{
-		Rows: template.HTML(strings.Join(rows, "")),
-	}); err != nil {
-		panic(err)
-	}
-
-	tableResult := tableBuf.String()
-
-	data := front.FrontData{
-		Table: template.HTML(tableResult),
-	}
-
-	if err := index.Execute(&indexBuf, data); err != nil {
-		panic(err)
-	}
-
-	w.WriteHeader(http.StatusOK)
-	if _, err := w.Write([]byte(indexBuf.String())); err != nil {
-		log.Println("Error encoding response:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	err = database.IncrementVisitCount()
-	if err != nil {
-		log.Println("Error increment count response:", err)
-		return
-	}
-}
-
-func robots(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "text/plain")
-	_, err := w.Write([]byte("User-agent: *\nAllow: /"))
-	if err != nil {
-		log.Println("Error robots response:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
 	}
 }
