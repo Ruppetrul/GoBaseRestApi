@@ -19,13 +19,12 @@ func main() {
 	http.HandleFunc("/api/current", api.Current)
 	http.HandleFunc("/robots.txt", web.Robots)
 
-	err := godotenv.Load(".env")
-	if err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	env := os.Getenv("APP_ENV")
 
-	if env == "" {
+	var env string
+	if env = os.Getenv("APP_ENV"); env == "" {
 		log.Fatalf("APP_ENV not found.")
 	} else {
 		fmt.Printf("Run in ENV: %s\n", env)
