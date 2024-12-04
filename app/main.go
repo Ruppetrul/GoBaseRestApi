@@ -26,21 +26,20 @@ func main() {
 	env := os.Getenv("APP_ENV")
 
 	if env == "" {
-		fmt.Println("APP_ENV not found.")
+		log.Fatalf("APP_ENV not found.")
 	} else {
-		fmt.Printf("APP_ENV: %s\n", env)
+		fmt.Printf("Run in ENV: %s\n", env)
 	}
-
-	if env == "production" {
+	switch env {
+	case "production":
 		certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
 		keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
 
 		if err := http.ListenAndServeTLS(":443", certFile, keyFile, nil); err != nil {
 			log.Fatalf("Ошибка при запуске сервера %v", err)
 		}
-	} else {
-		err := http.ListenAndServe(":80", nil)
-		if err != nil {
+	default:
+		if err := http.ListenAndServe(":80", nil); err != nil {
 			log.Fatalf("Ошибка при запуске сервера %v", err)
 		}
 	}
@@ -74,7 +73,6 @@ func test1(w http.ResponseWriter, r *http.Request) {
 	/*
 		There need prepare base html and save to temp file or memory.
 	*/
-
 	index, err := template.ParseFiles("front/index.html")
 	if err != nil {
 		panic(err)
