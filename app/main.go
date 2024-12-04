@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/", web.Index)
 	http.HandleFunc("/api/current", api.Current)
 	http.HandleFunc("/robots.txt", web.Robots)
+	http.HandleFunc("/favicon.ico", web.Favicon)
 
 	if err := godotenv.Load(".env"); err != nil {
 		log.Fatal("Error loading .env file")
