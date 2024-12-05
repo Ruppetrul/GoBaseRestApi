@@ -31,7 +31,7 @@ func GetDBInstance() (*dbSingleton, error) {
 
 	var connStr string
 	for key, value := range params {
-		connStr += fmt.Sprintf("%s=%s", key, value)
+		connStr += fmt.Sprintf("%s=%s ", key, value)
 	}
 	connStr = strings.TrimSpace(connStr)
 
