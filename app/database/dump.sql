@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS general_html (
 );
 
 CREATE TABLE IF NOT EXISTS page_visits (
-    visit_date VARCHAR(20) NOT NULL UNIQUE,
+    visit_date VARCHAR(20) NOT NULL,
     visit_count INTEGER
 );
 
