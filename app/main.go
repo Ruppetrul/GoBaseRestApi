@@ -32,10 +32,8 @@ func main() {
 	}
 	switch env {
 	case "production":
-		certFile := "/etc/letsencrypt/live/crypto-visor.ru/cert.pem"
-		keyFile := "/etc/letsencrypt/live/crypto-visor.ru/privkey.pem"
-
-		if err := http.ListenAndServeTLS(":443", certFile, keyFile, nil); err != nil {
+		baseUri := "/etc/letsencrypt/live/crypto-visor.ru/"
+		if err := http.ListenAndServeTLS(":443", baseUri+"cert.pem", baseUri+"privkey.pem", nil); err != nil {
 			log.Fatalf("Ошибка при запуске сервера %v", err)
 		}
 	default:
