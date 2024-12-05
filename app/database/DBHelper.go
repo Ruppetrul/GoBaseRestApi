@@ -2,9 +2,11 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -19,13 +21,20 @@ var once sync.Once
 func GetDBInstance() (*dbSingleton, error) {
 	var err error
 
-	env := os.Getenv("APP_ENV")
-	var connStr string
-	if env == "production" {
-		connStr = "user=first_rest password=first_rest dbname=first_rest host=localhost sslmode=disable"
-	} else {
-		connStr = "user=first_rest password=first_rest dbname=first_rest host=postgres sslmode=disable"
+	params := map[string]string{
+		"user":     os.Getenv("DB_USER"),
+		"password": os.Getenv("DB_PASSWORD"),
+		"dbname":   os.Getenv("DB_NAME"),
+		"sslmode":  os.Getenv("DB_SSL_MODE"),
+		"host":     os.Getenv("DB_HOST"),
 	}
+
+	var connStr string
+	for key, value := range params {
+		connStr += fmt.Sprintf("%s=%s", key, value)
+	}
+	connStr = strings.TrimSpace(connStr)
+
 	once.Do(func() {
 		instance = &dbSingleton{}
 		instance.Db, err = sql.Open("postgres", connStr)
