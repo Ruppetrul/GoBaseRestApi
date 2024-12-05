@@ -46,17 +46,17 @@ func Select(query string) (*sql.Rows, error) {
 	return connection.Db.Query(query)
 }
 
-func IncrementVisitCount() error {
+func IncrementVisitCount(remoteAddress string) error {
 	connection, err := GetDBInstance()
 
 	currentDate := time.Now().Format("2006-01-02")
 
 	_, err = connection.Db.Exec(`
-		INSERT INTO page_visits (visit_date, visit_count)
-		VALUES ($1, 1)
-		ON CONFLICT (visit_date)
+		INSERT INTO page_visits (visit_date, visit_count, visit_ip)
+		VALUES ($1, 1, $2)
+		ON CONFLICT (visit_date, visit_ip)
 		DO UPDATE SET visit_count = page_visits.visit_count + 1;
-	`, currentDate)
+	`, currentDate, remoteAddress)
 
 	return err
 }
