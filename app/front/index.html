@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Сryptocurrency prices</title>
+        <title>Курс криптовалют</title>
         <meta name="viewport" content="width=device-width">
-        <meta name="description" content="Сryptocurrency prices for popular crypt coins.">
+        <meta name="description" content="Курс криптовалют для популярных пар.">
+        <script>window.yaContextCb=window.yaContextCb||[]</script>
+        <script src="https://yandex.ru/ads/system/context.js" async></script>
     </head>
-    <h1 style="text-align: center;">Сryptocurrency prices</h1>
+    <h1 style="text-align: center;">Курс криптовалют</h1>
+    <body>
+        <div id="yandex_rtb_R-A-13310882-1"></div>
+        <script>
+            window.yaContextCb.push(() => {
+                Ya.Context.AdvManager.render({
+                    "blockId": "R-A-13310882-1",
+                    "renderTo": "yandex_rtb_R-A-13310882-1"
+                })
+            })
+        </script>
     {{.Table}}
+    </body>
 </html>
