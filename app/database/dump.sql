@@ -18,3 +18,11 @@ CREATE TABLE IF NOT EXISTS page_visits (
 
 ALTER TABLE page_visits ADD COLUMN IF NOT EXISTS visit_ip VARCHAR(40) NULL;
 ALTER TABLE page_visits ADD UNIQUE (visit_date, visit_ip);
+
+CREATE TABLE IF NOT EXISTS average_price_per_day (
+    pair          varchar(20) NOT NULL,
+    date          date,
+    average_price NUMERIC(28, 8) NOT NULL
+);
+
+ALTER TABLE average_price_per_day ADD UNIQUE (date, pair);
