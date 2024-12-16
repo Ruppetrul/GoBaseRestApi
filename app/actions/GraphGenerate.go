@@ -37,6 +37,7 @@ func Build(pair string) (string, error) {
 	var lastHalving time.Time
 	for index, halving := range halvings {
 		data, err := database.GetAverageData(pair, halving.Date, lastHalving)
+		lastHalvingData := lastHalving
 		lastHalving = halving.Date
 
 		if len(data) == 0 {
@@ -49,7 +50,7 @@ func Build(pair string) (string, error) {
 		}
 
 		svg += getPeriodData(data, color, 0)
-		svg += Svg.BuildText(graphSizeX+100, index*50, 14, color+": "+lastHalving.Format("2006-01-02")+" - "+halving.Date.Format("2006-01-02"))
+		svg += Svg.BuildText(graphSizeX+100, index*50, 14, color+": "+lastHalvingData.Format("2006-01-02")+" - "+halving.Date.Format("2006-01-02"))
 
 		fmt.Printf("Вытащили для периода %d %d записей \n", index, len(data))
 		if err != nil {
@@ -91,6 +92,8 @@ func getColor(index int) string {
 		return "green"
 	case 4:
 		return "red"
+	case 5:
+		return "black"
 	default:
 		return ""
 	}
