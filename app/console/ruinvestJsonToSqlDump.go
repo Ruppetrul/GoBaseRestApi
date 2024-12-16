@@ -1,5 +1,5 @@
 // Parse API response from ru invest and generate sql dump
-package tools
+package console
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Record struct {
+type CoveragePriceRecord struct {
 	RowDate       string  `json:"rowDate"`
 	LastMaxRaw    string  `json:"last_maxRaw"`
 	LastMinRaw    string  `json:"last_minRaw"`
@@ -26,7 +26,7 @@ func main() {
 		log.Fatal("Ошибка при чтении файла: ", err)
 	}
 
-	var records []Record
+	var records []CoveragePriceRecord
 	err = json.Unmarshal(data, &records)
 	if err != nil {
 		log.Fatal("Ошибка при разборе JSON: ", err)

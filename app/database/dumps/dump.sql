@@ -26,3 +26,13 @@ CREATE TABLE IF NOT EXISTS average_price_per_day (
 );
 
 ALTER TABLE average_price_per_day ADD UNIQUE (date, pair);
+
+CREATE TABLE IF NOT EXISTS bitcoin_halving_dates (
+    halving_date DATE NOT NULL UNIQUE
+);
+
+INSERT INTO bitcoin_halving_dates (halving_date) VALUES
+('2012-11-28'),
+('2016-07-09'),
+('2020-05-11'),
+('2024-04-20');
