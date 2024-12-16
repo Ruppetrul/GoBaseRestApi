@@ -50,7 +50,7 @@ func Build(pair string) (string, error) {
 		}
 
 		svg += getPeriodData(data, color, 0)
-		svg += Svg.BuildText(graphSizeX+100, index*50, 14, color+": "+lastHalvingData.Format("2006-01-02")+" - "+halving.Date.Format("2006-01-02"))
+		svg += Svg.BuildText(graphSizeX+100, (index+1)*50, 14, color+": "+lastHalvingData.Format("2006-01-02")+" - "+halving.Date.Format("2006-01-02"))
 
 		fmt.Printf("Вытащили для периода %d %d записей \n", index, len(data))
 		if err != nil {
