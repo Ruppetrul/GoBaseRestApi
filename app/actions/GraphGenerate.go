@@ -58,13 +58,17 @@ func Build(pair string) (string, error) {
 		}
 	}
 
-	svg += currentHalving(pair, lastHalving)
+	svg += currentHalving(pair, lastHalving, getColor(index+2))
+	svg += Svg.BuildText(
+		graphSizeX+100, (index+2)*50, 14,
+		getColor(index+2)+": "+lastHalving.Format("2006-01-02")+" - "+
+			time.Now().Format("2006-01-02"))
 
 	svg += "</svg>\n"
 	return svg, err
 }
 
-func currentHalving(pair string, lastHalving time.Time) string {
+func currentHalving(pair string, lastHalving time.Time, color string) string {
 	data, _ := database.GetAverageData(pair, time.Now(), lastHalving)
 	if len(data) == 0 {
 		return ""
@@ -77,7 +81,7 @@ func currentHalving(pair string, lastHalving time.Time) string {
 	c := pointsX * (daysDifference / halvingPeriod)
 
 	//TODO тут мин макс надо предполагать на основе предыдущих годиков
-	return getPeriodData(data, "red", int(c))
+	return getPeriodData(data, color, int(c))
 }
 
 func getColor(index int) string {
